@@ -160,7 +160,7 @@ def inscricao():
             input_camiseta = st.radio("Camiseta:", ["PP", "P", "M", "G", "GG"])
 
         st.divider()
-
+        st.write("Ao confirmar a inscrição vc está concordando com os termos do regulamento")
         #st.write("Termo de Responsabilidade")
 
         #def termo():
