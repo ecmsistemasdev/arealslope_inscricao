@@ -42,10 +42,10 @@ def calculateAge(birthDate):
 def enviar_email(snome,sfone,skm,semail, svl): 
     try: 
         corpo_email = f"""
-        <p>Pré incrição realizada para a <b>1ª Corrida Areal Slope</b> </p>
+        <p>Pré inscrição realizada para a <b>1ª Corrida Areal Slope</b> </p>
         <p>Nome: <b>{snome}</b> </p>
         <p>Telefone: <b>{sfone}</b> </p>
-        <p>Km: <b>{skm}</b> </p>
+        <p>Percurso: <b>{skm}</b> </p>
         <p>Valor da Inscrição: <b> R$ {svl}</b> </p>
         """
         
@@ -140,7 +140,7 @@ def inscricao():
     with ((form_inscricao.form("Inscricao"))):
         st.markdown("### Formulário de Inscrição")
 
-        input_km = st.radio("Km:", ["7km", "14km", "21km"], key="00")
+        input_km = st.radio("Percurso:", ["7km", "14km", "21km"], captions=["R$ 90,00","R$ 100,00","R$ 115,00"], key="00")
         input_email = st.text_input(label="E-mail:", key="01")
         input_nome = st.text_input(label="Primeiro Nome:", placeholder="Insira apenas seu primeiro nome", key="02")
         input_sobrenome = st.text_input(label="Sobrenome:", placeholder="Insira seu sobrenome",key="03")
