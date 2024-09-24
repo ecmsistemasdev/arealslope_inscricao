@@ -380,7 +380,7 @@ def inscricao():
                                  ID_ATLETA, EMAIL, CPF, NOME, DT_NASCIMENTO, NR_CELULAR, SEXO, CAMISETA, KM, FL_PAGO, 
                                  ATIVO, DT_INSCRICAO, ACEITO_TERMO, VL_PAGO, VL_INSCRICAO, ID_ANO, ID_PERCURSO )
                                  VALUES (
-                                        {idatleta},"{input_email}","{ncpf}","{input_nome + ' ' + input_sobrenome}","{datanasc}","{ncelular}",
+                                         {idatleta},"{input_email}","{ncpf}",upper("{input_nome + ' ' + input_sobrenome}"),"{datanasc}","{ncelular}",
                                         "{sexo}","{input_camiseta}","{v_km}",'N','S',"{dataf}",'S',0,{vl_inscricao},{v_ano},{idpercurso}) """
 
                 cursor = conexao.cursor()
