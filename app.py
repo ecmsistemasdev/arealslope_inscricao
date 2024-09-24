@@ -322,26 +322,50 @@ def inscricao():
             #    st.warning("Informe os nomes dos integrantes da Equipe do Desafio 200k", icon="⚠️")
             #    st.stop()
 
-            def vlinscricao(vidade,vkm):
-                if vkm == "7km":
-                    if vidade < 60:
-                        vl = 90
-                    else:
-                        vl = 45
-                elif vkm == "14km":
-                    if vidade < 60:
-                        vl = 100
-                    else:
-                        vl = 50
-                elif vkm == "21km":
-                    if vidade < 60:
-                        vl = 115
-                    else:
-                        vl = 57.5
+            #def vlinscricao(vidade,vkm):
+            #    if vkm == "7km":
+            #        idpercurso = 3
+            #        if vidade < 60:
+            #            vl = 90
+            #        else:
+            #            vl = 45
+            #    elif vkm == "14km":
+            #        idpercurso = 2
+            #        if vidade < 60:
+            #            vl = 100
+            #        else:
+            #            vl = 50
+            #    elif vkm == "21km":
+            #        idpercurso = 1
+            #        if vidade < 60:
+            #            vl = 115
+            #        else:
+            #            vl = 57.5
 
-                return vl
+            #    return vl
             
-            vl_inscricao = vlinscricao(idade, input_km)
+            #vl_inscricao = vlinscricao(idade, input_km)
+
+            if input_km == "7km":
+                idpercurso = 3
+                if idade < 60:
+                    vl = 90
+                else:
+                    vl = 45
+            elif input_km == "14km":
+                idpercurso = 2
+                if idade < 60:
+                    vl = 100
+                else:
+                    vl = 50
+            elif input_km == "21km":
+                idpercurso = 1
+                if idade < 60:
+                    vl = 115
+                else:
+                    vl = 57.5
+
+            vl_inscricao = vl
 
             v_nome = input_nome + ' ' + input_sobrenome
             v_ncelular = ncelular
@@ -351,21 +375,18 @@ def inscricao():
             v_vlinscricao = vl_inscricao
 
             try:
-
-
+                
                 qry_insert = f"""INSERT INTO arealslope.ATLETA (
-                                 ID_ATLETA, EMAIL, CPF, NOME, DT_NASCIMENTO, NR_CELULAR, SEXO, CAMISETA, 
-                                 KM, FL_PAGO, ATIVO, DT_INSCRICAO, ACEITO_TERMO, VL_PAGO, VL_INSCRICAO, ID_ANO )
+                                 ID_ATLETA, EMAIL, CPF, NOME, DT_NASCIMENTO, NR_CELULAR, SEXO, CAMISETA, KM, FL_PAGO, 
+                                 ATIVO, DT_INSCRICAO, ACEITO_TERMO, VL_PAGO, VL_INSCRICAO, ID_ANO, ID_PERCURSO )
                                  VALUES (
                                         {idatleta},"{input_email}","{ncpf}","{input_nome + ' ' + input_sobrenome}","{datanasc}","{ncelular}",
-                                        "{sexo}","{input_camiseta}","{v_km}",'N','S',"{dataf}",'S',0,{vl_inscricao},{v_ano}) """
-
+                                        "{sexo}","{input_camiseta}","{v_km}",'N','S',"{dataf}",'S',0,{vl_inscricao},{v_ano},{idpercurso}) """
 
                 cursor = conexao.cursor()
                 cursor.execute(qry_insert)
                 conexao.commit()
                 cursor.close()
-
 
             except mysql.connector.Error as error:
                 st.warning("Erro no Banco de Daods, tente novamente, se persistir contate o Administrador do Sistema! {}".format(error), icon="⚠️")
@@ -375,11 +396,9 @@ def inscricao():
                 if conexao.is_connected():
                     conexao.close()            
         
-
             tela_ativa = 2
 
             form_inscricao.empty()
-
 
 inscricao()
 
