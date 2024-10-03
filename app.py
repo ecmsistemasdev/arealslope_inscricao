@@ -1,7 +1,7 @@
 import streamlit as st
 import mysql.connector
 import re
-from datetime import date
+from datetime import date, datetime
 import smtplib
 import email.message
 
@@ -33,8 +33,11 @@ def calculateAge(birthDate):
 
     #birthDate = date(ano, mes, dia)
 
-    today = date.today() 
-    age = today.year - birthDate.year - ((today.month, today.day) < (birthDate.month, birthDate.day)) 
+    data_str = "19/01/2025"
+    dataRef = datetime.strptime(data_str, "%d/%m/%Y")
+
+    #today = date.today() 
+    age = dataRef.year - birthDate.year - ((dataRef.month, dataRef.day) < (birthDate.month, birthDate.day)) 
   
     return age 
 
@@ -161,43 +164,11 @@ def inscricao():
 
         st.divider()
         st.write("Ao confirmar a inscrição você está concordando com os termos do regulamento")
-        #st.write("Termo de Responsabilidade")
-
-        #def termo():
-        #    with open('Termo.txt', 'r', encoding='UTF-8') as f:
-        #        lines = f.readlines()
-        #        for line in lines:
-        #            st.caption(line)
-
-        #exibtermo = st.checkbox(label="Exibir Termo de Responsabilidade",bool=False)
-        #if exibtermo:
-        
-        #termo()
-
-        #check_aceita = False        
-        
-        #agree = st.checkbox('LI E ACEITO O TERMO DE RESPONSABILIDADE',key="disabled")
-
-
-        #agree = st.radio("LI E ACEITO O TERMO DE RESPONSABILIDADE 👉",
-        #                key="visibility",
-        #                options=["visible", "hidden", "collapsed"],)
-
-
-        #if agree:
-        #    check_aceita = True
 
         cursor = conexao.cursor()
         comando = f'SELECT ID_ATLETA FROM arealslope.ATLETA WHERE CPF = "{input_cpf}"'
         cursor.execute(comando)
         resultado_cpf = cursor.fetchone()
-        #s_cpf = resultado_cpf[0]
-
-        #cursor1 = conexao.cursor()
-        #comando = f'SELECT ID_ATLETA FROM 200k.ATLETA WHERE EMAIL = "{input_email}"'
-        #cursor1.execute(comando)
-        #resultado_email = cursor1.fetchone()
-        ##s_email = resultado_email[0]
 
         cursor2 = conexao.cursor()
         id_ = f'SELECT IFNULL(MAX(ID_ATLETA)+1,1) FROM arealslope.ATLETA'
@@ -211,10 +182,6 @@ def inscricao():
             if input_email == '':
                 st.warning("Informe o E-mail!", icon="⚠️")
                 st.stop()
-
-            #if not(re.search(regex,input_email)):  
-            #    st.warning("E-mail incorreto", icon="⚠️")   
-            #    st.stop()
 
             if input_cpf == '':
                 st.warning("Informe o CPF!", icon="⚠️")
@@ -263,10 +230,6 @@ def inscricao():
                 st.warning(f"O CPF {ncpf} não é válido!", icon="⚠️")
                 st.stop()
             
-            #if len(ncpf) is not 11:
-            #    st.warning("Nº do CPF inválido", icon="⚠️")
-            #    st.stop()
-
             if input_km == '':
                 st.warning("Informe o Km!", icon="⚠️")
                 st.stop()
@@ -300,14 +263,6 @@ def inscricao():
                 st.warning("CPF Já cadastrado!", icon="⚠️")
                 st.stop()
 
-            #if resultado_email is not None:
-            #    st.warning("E-mail Já cadastrado!", icon="⚠️")
-            #    st.stop()
-
-            #if not check_aceita:
-            #    st.warning("Necessário aceitar o Termo de Responsabildade!", icon="⚠️")
-            #    st.stop()
-
             if input_genero == 'Masculino':
                 sexo = "M"
             else:
@@ -318,34 +273,6 @@ def inscricao():
             datanasc = input_dn.strftime('%d/%m/%Y')
             idade = calculateAge(input_dn)
             
-            #if idmodalidade > 1 and input_participantes == '':
-            #    st.warning("Informe os nomes dos integrantes da Equipe do Desafio 200k", icon="⚠️")
-            #    st.stop()
-
-            #def vlinscricao(vidade,vkm):
-            #    if vkm == "7km":
-            #        idpercurso = 3
-            #        if vidade < 60:
-            #            vl = 90
-            #        else:
-            #            vl = 45
-            #    elif vkm == "14km":
-            #        idpercurso = 2
-            #        if vidade < 60:
-            #            vl = 100
-            #        else:
-            #            vl = 50
-            #    elif vkm == "21km":
-            #        idpercurso = 1
-            #        if vidade < 60:
-            #            vl = 115
-            #        else:
-            #            vl = 57.5
-
-            #    return vl
-            
-            #vl_inscricao = vlinscricao(idade, input_km)
-
             if input_km == "7km":
                 idpercurso = 3
                 if idade < 60:
@@ -378,10 +305,10 @@ def inscricao():
                 
                 qry_insert = f"""INSERT INTO arealslope.ATLETA (
                                  ID_ATLETA, EMAIL, CPF, NOME, DT_NASCIMENTO, NR_CELULAR, SEXO, CAMISETA, KM, FL_PAGO, 
-                                 ATIVO, DT_INSCRICAO, ACEITO_TERMO, VL_PAGO, VL_INSCRICAO, ID_ANO, ID_PERCURSO )
+                                 ATIVO, DT_INSCRICAO, ACEITO_TERMO, VL_PAGO, VL_INSCRICAO, ID_ANO, ID_PERCURSO, IDADE )
                                  VALUES (
-                                         {idatleta},"{input_email}","{ncpf}",upper("{input_nome + ' ' + input_sobrenome}"),"{datanasc}","{ncelular}",
-                                        "{sexo}","{input_camiseta}","{v_km}",'N','S',"{dataf}",'S',0,{vl_inscricao},{v_ano},{idpercurso}) """
+                                        {idatleta},"{input_email}","{ncpf}",upper("{input_nome + ' ' + input_sobrenome}"),"{datanasc}","{ncelular}",
+                                        "{sexo}","{input_camiseta}","{v_km}",'N','S',"{dataf}",'S',0,{vl_inscricao},{v_ano},{idpercurso},{idade}) """
 
                 cursor = conexao.cursor()
                 cursor.execute(qry_insert)
